@@ -1,0 +1,25 @@
+version: "3.5"
+
+services:
+  diun:
+    image: crazymax/diun:latest
+    command: serve
+    volumes:
+      - "${DOCKER_PATH_PERSISTENT}/diun/data:/data"
+      - "${DOCKER_PATH_PERSISTENT}/diun/diun.yml:/diun.yml:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    environment:
+      - "TZ=${DOCKER_TZ}
+      - "LOG_LEVEL=info"
+      - "LOG_JSON=false"
+    restart: unless-stopped
+
+# ./diun.yml
+
+watch:
+  workers: 20
+  schedule: ${CRON_EXPRESSION}
+
+providers:
+  docker:
+    watchStopped: true
