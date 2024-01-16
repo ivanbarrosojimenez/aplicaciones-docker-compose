@@ -6,8 +6,8 @@ services:
     container_name: ${DOCKER_CONTAINER_NAME_PREFIX}diun
     command: serve
     volumes:
-      - "${DOCKER_PATH_PERSISTENT}/diun/data:/data"
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - ${DOCKER_PATH_PERSISTENT}/diun/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - TZ=${DOCKER_TZ}
       - LOG_LEVEL=info
