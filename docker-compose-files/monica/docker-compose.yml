@@ -9,7 +9,7 @@ services:
     ports:
       - 8090:80
     environment:
-      - APP_KEY=
+      - APP_KEY=${APP_KEY}
       - DB_HOST=db
       - DB_USERNAME=${MONICA_USER}
       - DB_PASSWORD=${MONICA_PASS}
