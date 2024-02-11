@@ -1,0 +1,17 @@
+version: "3.3"
+
+services:
+
+  papermerge:
+    image: linuxserver/papermerge
+    container_name: ${DOCKER_CONTAINER_NAME_PREFIX}paper-merge
+    restart: unless-stopped    
+    environment:
+      - PUID=${DOCKER_ROOTPUID:1}
+      - PGID=${DOCKER_ROOTPGID:1}
+      - TZ=Europe/Madrid
+    volumes:
+      - ${DOCKER_PATH_PERSISTENT}paper-merge/config:/config
+      - ${DOCKER_PATH_PERSISTENT}paper-merge/data:/data
+    ports:
+      - "8200:8000"
