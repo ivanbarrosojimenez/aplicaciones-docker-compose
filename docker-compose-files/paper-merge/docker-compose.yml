@@ -14,4 +14,4 @@ services:
       - ${DOCKER_PATH_PERSISTENT}paper-merge/config:/config
       - ${DOCKER_PATH_PERSISTENT}paper-merge/data:/data
     ports:
-      - "8200:8000"
+      - "8201:8001"
