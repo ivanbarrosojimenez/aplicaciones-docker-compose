@@ -11,7 +11,7 @@ services:
       - PGID=${DOCKER_ROOTPGID}
       - TZ=Europe/Madrid
     volumes:
-      - ${DOCKER_PATH_PERSISTENT}paper-merge/config:/config
-      - ${DOCKER_PATH_PERSISTENT}paper-merge/data:/data
+      - ${DOCKER_PATH_PERSISTENT}/paper-merge/config:/config
+      - ${DOCKER_PATH_PERSISTENT}/paper-merge/data:/data
     ports:
       - "8201:8001"
