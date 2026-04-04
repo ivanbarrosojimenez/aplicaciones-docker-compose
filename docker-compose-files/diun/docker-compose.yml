@@ -59,7 +59,7 @@ services:
       - n8n_backend
 
   n8n:
-    image: n8nio/n8n:1.123.28
+    image: docker.n8n.io/n8nio/n8n:1.123.28
     hostname: n8n
 
     ports:
