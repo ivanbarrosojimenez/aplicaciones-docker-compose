@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   n8n-postgres:
-    image: postgres:17.9-alpine
+    image: ghcr.io/danielptv/postgres-multiple-databases:latest
     hostname: n8n-postgres
 
     volumes:
