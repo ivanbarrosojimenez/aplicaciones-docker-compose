@@ -5,11 +5,8 @@ services:
     image: ghcr.io/danielptv/postgres-multiple-databases:latest
     hostname: n8n-postgres
 
-    user: "${DOCKER_ROOTPUID}:${DOCKER_ROOTPGID}"
-
     volumes:
-      - n8n_data:/home/node/.n8n
-
+      - ${DOCKER_PATH_PERSISTENT}/n8n/postgres:/var/lib/postgresql/data
     environment:
       - TZ=${DOCKER_TZ}
       - POSTGRES_DB=${N8N_POSTGRES_DB:-n8n}
@@ -70,8 +67,10 @@ services:
         protocol: tcp
         mode: ingress
 
+    user: "${DOCKER_ROOTPUID}:${DOCKER_ROOTPGID}"
+
     volumes:
-      - ${DOCKER_PATH_PERSISTENT}/n8n/data:/home/node/.n8n
+      - n8n_data:/home/node/.n8n
 
     environment:
       - TZ=${DOCKER_TZ}
