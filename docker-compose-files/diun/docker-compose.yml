@@ -97,6 +97,10 @@ services:
       # opcional, para reducir telemetría
       - N8N_DIAGNOSTICS_ENABLED=false
 
+      - N8N_RUNNERS_ENABLED=true
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=true
+      - N8N_GIT_NODE_DISABLE_BARE_REPOS=true
+
     deploy:
       mode: replicated
       replicas: 1
