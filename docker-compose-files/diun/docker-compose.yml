@@ -180,6 +180,7 @@ services:
       DIUN_NOTIF_TELEGRAM_TEMPLATEBODY: 'Docker tag {{ if .Entry.Image.HubLink }}[{{ .Entry.Image }}]({{ .Entry.Image.HubLink }}){{ else }}{{ .Entry.Image }}{{ end }} which you subscribed to through {{ .Entry.Provider }} provider has been {{ if (eq .Entry.Status "new") }}newly added{{ else }}updated{{ end }} on {{ escapeMarkdown .Meta.Hostname }}.'      
       DIUN_NOTIF_WEBHOOK_ENDPOINT: http://192.168.1.151:5678/webhook/redeploy-servicio
       DIUN_NOTIF_WEBHOOK_METHOD: POST
+      DIUN_NOTIF_WEBHOOK_HEADERS_CONTENT-TYPE: application/json
       
     deploy:
       mode: replicated
