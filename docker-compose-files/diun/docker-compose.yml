@@ -182,6 +182,10 @@ services:
       DIUN_NOTIF_WEBHOOK_METHOD: POST
       DIUN_NOTIF_WEBHOOK_HEADERS_CONTENT-TYPE: application/json
       DIUN_NOTIF_WEBHOOK_TLSSKIPVERIFY: "true"
+      DIUN_REGOPTS_0_NAME: docker.io
+      DIUN_REGOPTS_0_SELECTOR: image
+      DIUN_REGOPTS_0_INSECURETLS: "true"
+
       
     deploy:
       mode: replicated
