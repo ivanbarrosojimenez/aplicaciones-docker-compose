@@ -181,8 +181,8 @@ services:
       DIUN_NOTIF_WEBHOOK_ENDPOINT: http://192.168.1.151:5678/webhook/redeploy-servicio
       DIUN_NOTIF_WEBHOOK_METHOD: POST
       DIUN_NOTIF_WEBHOOK_HEADERS_CONTENT-TYPE: application/json
-      DIUN_NOTIF_WEBHOOK_TLSSKIPVERIFY: "true"
-
+      #DIUN_NOTIF_WEBHOOK_TLSSKIPVERIFY: "true"
+      DIUN_PROVIDERS_DOCKER: "true"
 
       
     deploy:
