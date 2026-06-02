@@ -8,7 +8,7 @@ services:
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /home/ivan/docker/diun:/data
+      - ${DOCKER_PATH_PERSISTENT}/diun:/data
 
     environment:
       TZ: ${DOCKER_TZ}
@@ -71,3 +71,4 @@ services:
 networks:
   infra_net:
     external: true
+    name: ${DOCKER_NETWORK:-infra_net}
