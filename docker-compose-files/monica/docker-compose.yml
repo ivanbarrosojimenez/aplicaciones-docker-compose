@@ -6,7 +6,7 @@ services:
 
     environment:
       APP_KEY: ${APP_KEY}
-      DB_HOST: tasks.db
+      DB_HOST: service_db
       DB_USERNAME: ${MONICA_USER}
       DB_PASSWORD: ${MONICA_PASS}
 
