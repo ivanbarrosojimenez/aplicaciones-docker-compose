@@ -9,6 +9,7 @@ services:
       DB_HOST: db
       DB_USERNAME: ${MONICA_USER}
       DB_PASSWORD: ${MONICA_PASS}
+      DB_DATABASE: monica
 
     volumes:
       - ${DOCKER_PATH_PERSISTENT}/monica/app:/var/www/html/storage
