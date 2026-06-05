@@ -21,6 +21,14 @@ services:
 
     networks:
       - monica_backend
+      - infra_net
+
+    healthcheck:
+      test: ["CMD-SHELL", "php -v >/dev/null 2>&1 && test -d /var/www/html/storage && test -f /var/www/html/storage/oauth-private.key || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
 
     deploy:
       mode: replicated
@@ -40,7 +48,7 @@ services:
         delay: 10s
         order: stop-first
         failure_action: rollback
-        monitor: 30s
+        monitor: 60s
 
       rollback_config:
         parallelism: 1
@@ -58,6 +66,21 @@ services:
       labels:
         - "com.centurylinklabs.watchtower.scope=swarm"
 
+        - "traefik.enable=true"
+        - "traefik.swarm.network=${DOCKER_NETWORK:-infra_net}"
+
+        - "traefik.http.routers.${STACK_KEY}-http.rule=Host(`${MONICA_HOST}`)"
+        - "traefik.http.routers.${STACK_KEY}-http.entrypoints=http"
+        - "traefik.http.routers.${STACK_KEY}-http.middlewares=redirect-to-https@file"
+        - "traefik.http.routers.${STACK_KEY}-http.service=noop@internal"
+
+        - "traefik.http.routers.${STACK_KEY}-https.rule=Host(`${MONICA_HOST}`)"
+        - "traefik.http.routers.${STACK_KEY}-https.entrypoints=https"
+        - "traefik.http.routers.${STACK_KEY}-https.tls.certresolver=step"
+        - "traefik.http.routers.${STACK_KEY}-https.service=${STACK_KEY}-svc"
+
+        - "traefik.http.services.${STACK_KEY}-svc.loadbalancer.server.port=80"
+
   db:
     image: mariadb:11
 
@@ -72,6 +95,13 @@ services:
 
     networks:
       - monica_backend
+
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u${MONICA_USER} -p${MONICA_PASS} --silent || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
 
     deploy:
       mode: replicated
@@ -91,7 +121,7 @@ services:
         delay: 10s
         order: stop-first
         failure_action: rollback
-        monitor: 30s
+        monitor: 60s
 
       rollback_config:
         parallelism: 1
@@ -110,6 +140,10 @@ services:
         - "com.centurylinklabs.watchtower.scope=swarm"
 
 networks:
+  infra_net:
+    external: true
+    name: ${DOCKER_NETWORK:-infra_net}
+
   monica_backend:
     driver: overlay
     attachable: true
