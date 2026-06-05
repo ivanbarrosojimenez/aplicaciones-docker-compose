@@ -6,7 +6,7 @@ services:
 
     environment:
       APP_KEY: ${APP_KEY}
-      DB_HOST: db
+      DB_HOST: monica-service_db
       DB_USERNAME: ${MONICA_USER}
       DB_PASSWORD: ${MONICA_PASS}
 
@@ -21,6 +21,7 @@ services:
 
     networks:
       - monica_backend
+      - infra_net
 
     deploy:
       mode: replicated
@@ -51,6 +52,21 @@ services:
           memory: ${MONICA_LIM_MEM:-1G}
       labels:
         - "com.centurylinklabs.watchtower.scope=swarm"
+
+        - "traefik.enable=true"
+        - "traefik.swarm.network=${DOCKER_NETWORK:-infra_net}"
+
+        - "traefik.http.routers.${STACK_KEY}-http.rule=Host(`${MONICA_HOST}`)"
+        - "traefik.http.routers.${STACK_KEY}-http.entrypoints=http"
+        - "traefik.http.routers.${STACK_KEY}-http.middlewares=redirect-to-https@file"
+        - "traefik.http.routers.${STACK_KEY}-http.service=noop@internal"
+
+        - "traefik.http.routers.${STACK_KEY}-https.rule=Host(`${MONICA_HOST}`)"
+        - "traefik.http.routers.${STACK_KEY}-https.entrypoints=https"
+        - "traefik.http.routers.${STACK_KEY}-https.tls.certresolver=step"
+        - "traefik.http.routers.${STACK_KEY}-https.service=${STACK_KEY}-svc"
+
+        - "traefik.http.services.${STACK_KEY}-svc.loadbalancer.server.port=80"
 
   db:
     image: mariadb:11
@@ -98,6 +114,10 @@ services:
         - "com.centurylinklabs.watchtower.scope=swarm"
 
 networks:
+  infra_net:
+    external: true
+    name: ${DOCKER_NETWORK:-infra_net}
+
   monica_backend:
     driver: overlay
     attachable: true
