@@ -2,38 +2,29 @@ version: "3.9"
 
 services:
   app:
-    image: monica
+    image: monica:latest
 
     environment:
       APP_KEY: ${APP_KEY}
       DB_HOST: db
       DB_USERNAME: ${MONICA_USER}
       DB_PASSWORD: ${MONICA_PASS}
-      DB_DATABASE: monica
 
     volumes:
-      - ${DOCKER_PATH_PERSISTENT}/monica/app:/var/www/html/storage
+      - ${DOCKER_PATH_PERSISTENT}/monica/data:/var/www/html/storage
 
     ports:
       - target: 80
-        published: 8090
+        published: ${MONICA_PORT:-8090}
         protocol: tcp
         mode: ingress
 
     networks:
       - monica_backend
-      - infra_net
-
-    healthcheck:
-      test: ["CMD-SHELL", "php -v >/dev/null 2>&1 && test -d /var/www/html/storage || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 90s
 
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: ${MONICA_REPLICAS:-1}
 
       placement:
         constraints:
@@ -77,19 +68,10 @@ services:
       MYSQL_PASSWORD: ${MONICA_PASS}
 
     volumes:
-      - ${DOCKER_PATH_PERSISTENT}/monica/db:/var/lib/mysql
+      - /home/docker-images/volumes/mysql/_data:/var/lib/mysql
 
     networks:
-      monica_backend:
-        aliases:
-          - db
-
-    healthcheck:
-      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u${MONICA_USER} -p${MONICA_PASS} --silent || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
+      - monica_backend
 
     deploy:
       mode: replicated
@@ -128,10 +110,6 @@ services:
         - "com.centurylinklabs.watchtower.scope=swarm"
 
 networks:
-  infra_net:
-    external: true
-    name: ${DOCKER_NETWORK:-infra_net}
-
   monica_backend:
     driver: overlay
     attachable: true
