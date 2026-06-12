@@ -9,7 +9,8 @@ services:
       DB_HOST: monica-service_db
       DB_USERNAME: ${MONICA_USER}
       DB_PASSWORD: ${MONICA_PASS}
-
+      APP_URL: https://${MONICA_HOST}
+      TRUSTED_PROXIES: "*"
     volumes:
       - ${DOCKER_PATH_PERSISTENT}/monica/data:/var/www/html/storage
 
