@@ -73,8 +73,6 @@ services:
 
         - "traefik.http.services.${STACK_KEY}-svc.loadbalancer.server.port=80"
 
-        - "traefik.http.services.${STACK_KEY}-svc.loadbalancer.server.port=80"
-
   db:
     image: mariadb:11
 
