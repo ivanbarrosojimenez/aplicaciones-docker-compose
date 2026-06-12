@@ -57,18 +57,21 @@ services:
         - "traefik.enable=true"
         - "traefik.swarm.network=${DOCKER_NETWORK:-infra_net}"
 
-        - "traefik.http.routers.${STACK_KEY}-http.rule=Host(`${MONICA_HOST}`)"
+        - "traefik.http.routers.${STACK_KEY}-http.rule=Host(`${MONICA_HOST}`) && PathPrefix(`/`)"
         - "traefik.http.routers.${STACK_KEY}-http.entrypoints=http"
         - "traefik.http.middlewares.${STACK_KEY}-https.redirectscheme.scheme=https"
         - "traefik.http.middlewares.${STACK_KEY}-https.redirectscheme.permanent=true"
-        
         - "traefik.http.routers.${STACK_KEY}-http.middlewares=${STACK_KEY}-https"
         - "traefik.http.routers.${STACK_KEY}-http.service=noop@internal"
+        - "traefik.http.routers.${STACK_KEY}-http.priority=100"
 
-        - "traefik.http.routers.${STACK_KEY}-https.rule=Host(`${MONICA_HOST}`)"
+        - "traefik.http.routers.${STACK_KEY}-https.rule=Host(`${MONICA_HOST}`) && PathPrefix(`/`)"
         - "traefik.http.routers.${STACK_KEY}-https.entrypoints=https"
         - "traefik.http.routers.${STACK_KEY}-https.tls.certresolver=step"
         - "traefik.http.routers.${STACK_KEY}-https.service=${STACK_KEY}-svc"
+        - "traefik.http.routers.${STACK_KEY}-https.priority=100"
+
+- "traefik.http.services.${STACK_KEY}-svc.loadbalancer.server.port=80"
 
         - "traefik.http.services.${STACK_KEY}-svc.loadbalancer.server.port=80"
 
