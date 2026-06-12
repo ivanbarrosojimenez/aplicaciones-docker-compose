@@ -71,7 +71,7 @@ services:
         - "traefik.http.routers.${STACK_KEY}-https.service=${STACK_KEY}-svc"
         - "traefik.http.routers.${STACK_KEY}-https.priority=100"
 
-- "traefik.http.services.${STACK_KEY}-svc.loadbalancer.server.port=80"
+        - "traefik.http.services.${STACK_KEY}-svc.loadbalancer.server.port=80"
 
         - "traefik.http.services.${STACK_KEY}-svc.loadbalancer.server.port=80"
 
