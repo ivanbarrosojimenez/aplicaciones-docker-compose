@@ -6,8 +6,6 @@ services:
 
     environment:
       APP_KEY: ${APP_KEY}
-      APP_ENV: local
-      APP_URL: http://${MONICA_IP}:${MONICA_PORT:-8090}
       DB_HOST: monica-service_db
       DB_USERNAME: ${MONICA_USER}
       DB_PASSWORD: ${MONICA_PASS}
@@ -73,12 +71,6 @@ services:
         - "traefik.http.routers.${STACK_KEY}-https.service=${STACK_KEY}-svc"
         - "traefik.http.routers.${STACK_KEY}-https.priority=100"
         
-        - 'traefik.http.middlewares.${STACK_KEY}-https-headers.headers.customrequestheaders.X-Forwarded-Proto=https'
-        - 'traefik.http.middlewares.${STACK_KEY}-https-headers.headers.customrequestheaders.X-Forwarded-Ssl=on'
-        - 'traefik.http.middlewares.${STACK_KEY}-https-headers.headers.customrequestheaders.X-Forwarded-Port=443'
-        - 'traefik.http.middlewares.${STACK_KEY}-https-headers.headers.customrequestheaders.X-Forwarded-Host=${MONICA_HOST}'
-
-        - 'traefik.http.routers.${STACK_KEY}-https.middlewares=${STACK_KEY}-https-headers'
         - "traefik.http.services.${STACK_KEY}-svc.loadbalancer.server.port=80"
 
   db:
